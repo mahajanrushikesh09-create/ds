@@ -1,0 +1,45 @@
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+def construct_from_prefix(prefix):
+    stack = []
+    for char in reversed(prefix):
+        if char.isalnum():
+            stack.append(Node(char))
+        else:
+            node = Node(char)
+            node.left = stack.pop()
+            node.right = stack.pop()
+            stack.append(node)
+    return stack[-1]
+
+def postorder_non_recursive(root):
+    if not root:
+        return []
+    stack1, stack2 = [root], []
+    while stack1:
+        node = stack1.pop()
+        stack2.append(node)
+        if node.left:
+            stack1.append(node.left)
+        if node.right:
+            stack1.append(node.right)
+    return [node.value for node in reversed(stack2)]
+
+def delete_tree(root):
+    if root:
+        delete_tree(root.left)
+        delete_tree(root.right)
+        root.left = None
+        root.right = None
+        root.value = None
+
+prefix_expr = "+--a*bc/def"
+root = construct_from_prefix(prefix_expr)
+print("Postorder Traversal (Non-Recursive):", postorder_non_recursive(root))
+
+delete_tree(root)
+print("Tree deleted. Root value is now:", root.value)
