@@ -1,0 +1,48 @@
+library_records = {
+    "Rushikesh": {"Python Programming": 3, "Data Science": 2},
+    "Aarav": {"Python Programming": 0, "Machine Learning": 0},
+    "Sneha": {"Data Science": 1, "C Programming": 2},
+    "Priya": {"Python Programming": 4, "Data Science": 3},
+    "Rohan": {"C Programming": 0, "Machine Learning": 1}
+}
+def average_books_borrowed(records):
+    total_borrowed = 0
+    total_members = len(records)
+    for member in records:
+        total_borrowed += sum(records[member].values())
+    average = total_borrowed / total_members
+    return average
+def highest_and_lowest_borrowed_book(records):
+    book_borrow_counts = {}
+    for member in records:
+        for book, count in records[member].items():
+            book_borrow_counts[book] = book_borrow_counts.get(book, 0) + count
+    most_borrowed = max(book_borrow_counts, key=book_borrow_counts.get)
+    least_borrowed = min(book_borrow_counts, key=book_borrow_counts.get)
+    return most_borrowed, least_borrowed
+def count_non_borrowers(records):
+    count = 0
+    for member in records:
+        if sum(records[member].values()) == 0:
+            count += 1
+    return count
+from statistics import mode
+
+def most_frequent_borrowed_book(records):
+    book_borrow_counts = {}
+    for member in records:
+        for book, count in records[member].items():
+            book_borrow_counts[book] = book_borrow_counts.get(book, 0) + count
+    borrow_values = list(book_borrow_counts.values())
+    most_common_count = mode(borrow_values)
+    most_common_books = [book for book, c in book_borrow_counts.items() if c == most_common_count]
+    return most_common_books
+print("Average books borrowed:", average_books_borrowed(library_records))
+
+high, low = highest_and_lowest_borrowed_book(library_records)
+print("Most borrowed book:", high)
+print("Least borrowed book:", low)
+
+print("Members with 0 borrowings:", count_non_borrowers(library_records))
+
+print("Most frequently borrowed book(s):", most_frequent_borrowed_book(library_records))
