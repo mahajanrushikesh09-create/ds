@@ -1,0 +1,39 @@
+ef prims_algorithm(graph, start=0):
+    """	
+    graph: adjacency matrix representation
+           graph[u][v] = weight (0 if no edge)
+    start: starting node
+    """
+    n = len(graph)
+    selected = [False] * n
+    key = [float('inf')] * n
+    parent = [-1] * n
+    key[start] = 0  
+    for _ in range(n):
+        min_key = float('inf')
+        u = -1
+        for v in range(n):
+            if not selected[v] and key[v] < min_key:
+                min_key = key[v]
+                u = v
+        selected[u] = True
+        for v in range(n):
+            if graph[u][v] != 0 and not selected[v] and graph[u][v] < key[v]:
+                key[v] = graph[u][v]
+                parent[v] = u
+    mst_edges = []
+    total_cost = 0
+    for v in range(n):
+        if parent[v] != -1:
+            mst_edges.append((parent[v], v, graph[parent[v]][v]))
+            total_cost += graph[parent[v]][v]
+    return total_cost, mst_edges
+graph = [
+    [0, 4, 3, 0],
+    [4, 0, 1, 2],
+    [3, 1, 0, 4],
+    [0, 2, 4, 0]
+]
+cost, mst = prims_algorithm(graph, start=0)
+print("Minimum total delivery time:", cost)
+print("Delivery paths (edges in MST):", mst)
